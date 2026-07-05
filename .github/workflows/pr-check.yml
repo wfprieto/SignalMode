@@ -1,0 +1,35 @@
+name: PR Check
+
+on:
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  pr-validate:
+    name: PR Validation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check PR title follows Conventional Commits
+        run: |
+          TITLE="${{ github.event.pull_request.title }}"
+          if echo "$TITLE" | grep -qE "^(feat|fix|docs|style|refactor|perf|test|chore|ci|revert)(\(.+\))?: .+"; then
+            echo "OK: PR title follows Conventional Commits"
+          else
+            echo "WARN: PR title does not follow Conventional Commits format"
+            echo "Expected: feat|fix|docs|style|refactor|perf|test|chore|ci|revert(scope): description"
+            echo "Got: $TITLE"
+          fi
+
+      - name: Check for large files
+        run: |
+          LARGE=$(find . -not -path "./.git/*" -size +500k -type f)
+          if [ -n "$LARGE" ]; then
+            echo "WARN: Large files detected:"
+            echo "$LARGE"
+          else
+            echo "OK: No large files"
+          fi

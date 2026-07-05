@@ -1,0 +1,93 @@
+name: SignalMode CI
+
+on:
+  push:
+    branches: [main, develop, "manus/**", "feat/**", "fix/**"]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  validate:
+    name: Validate
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Validate JavaScript syntax
+        run: |
+          echo "=== Checking JS syntax ==="
+          for f in bin/install.js \
+                   src/hooks/signalmode-activate.js \
+                   src/hooks/signalmode-mode-tracker.js \
+                   src/hooks/signalmode-config.js \
+                   src/hooks/signalcrew-model-overrides.js; do
+            node --check "$f" && echo "OK: $f" || { echo "FAIL: $f"; exit 1; }
+          done
+
+      - name: Validate Python syntax
+        run: |
+          echo "=== Checking Python syntax ==="
+          for f in skills/signalmode-compress/scripts/cli.py \
+                   skills/signalmode-compress/scripts/compress.py \
+                   skills/signalmode-compress/scripts/detect.py \
+                   skills/signalmode-compress/scripts/validate.py; do
+            python3 -m py_compile "$f" && echo "OK: $f" || { echo "FAIL: $f"; exit 1; }
+          done
+
+      - name: Check for brand contamination
+        run: |
+          echo "=== Checking for original brand identifiers ==="
+          HITS=$(grep -rni "caveman\|julius\|brussee\|cavecrew\|dancing-rock\|atlas-cloud" \
+            --include="*.md" --include="*.js" --include="*.py" --include="*.json" \
+            --include="*.sh" --include="*.ps1" . 2>/dev/null | wc -l)
+          if [ "$HITS" -gt 0 ]; then
+            echo "FAIL: Brand contamination found ($HITS hits)"
+            grep -rni "caveman\|julius\|brussee\|cavecrew\|dancing-rock\|atlas-cloud" \
+              --include="*.md" --include="*.js" --include="*.py" --include="*.json" \
+              --include="*.sh" --include="*.ps1" .
+            exit 1
+          fi
+          echo "OK: Zero brand contamination"
+
+      - name: Validate package.json
+        run: |
+          echo "=== Checking package.json ==="
+          node -e "const p=require('./package.json'); \
+            if(!p.name||!p.version||!p.author) { \
+              console.error('FAIL: Missing required fields'); process.exit(1); \
+            } \
+            console.log('OK: name=' + p.name + ' version=' + p.version + ' author=' + p.author);"
+
+      - name: Validate SKILL.md triggers
+        run: |
+          echo "=== Checking SKILL.md triggers ==="
+          for f in skills/*/SKILL.md; do
+            if ! grep -q "^trigger:" "$f"; then
+              echo "FAIL: Missing trigger in $f"
+              exit 1
+            fi
+            echo "OK: $f"
+          done
+
+      - name: Check all platform files exist
+        run: |
+          echo "=== Checking platform files ==="
+          for p in chatgpt claude claudecode codex copilot cursor gemini manus replit windsurf full-signal; do
+            if [ ! -f "platforms/${p}.md" ]; then
+              echo "FAIL: Missing platforms/${p}.md"
+              exit 1
+            fi
+            echo "OK: platforms/${p}.md"
+          done
