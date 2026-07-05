@@ -1,6 +1,6 @@
 # signalmode-voice
 
-Applies The Strategist voice standard to all output. Verdict-first structure, calm authority, clean judgment, no corporate theater.
+Your personal writing voice template. Fully customizable. Ships with The Strategist voice as the default: verdict-first structure, calm authority, clean judgment, no corporate theater. Edit the SKILL.md to make it your own.
 
 ## Usage
 
@@ -21,6 +21,12 @@ Covers context-specific modes: executive-facing (verdict first, minimal words), 
 
 Anyone who wants their AI agent to write and think like a senior operator rather than a helpful assistant. Particularly effective for strategy, code review, technical specs, and executive communication.
 
+## Customization
+
+This skill is designed to be edited. The defaults are a starting point. Change the output order, voice model, phrase list, context modes, and self-check to match your actual writing style.
+
+Do not edit `signalmode-human`. That skill is immutable.
+
 ## Pair with
 
-`/signalmode-human` — adds banned-word enforcement and AI-tell removal on top of the voice standard. Together they cover both dimensions of signal hygiene.
+`/signalmode-human` — adds immutable anti-AI hygiene rules on top of your personal voice standard. Together they cover both dimensions of signal hygiene.

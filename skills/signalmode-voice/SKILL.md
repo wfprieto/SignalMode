@@ -2,19 +2,21 @@
 name: signalmode-voice
 version: 1.0.0
 description: >
-  Applies The Strategist voice standard to all output. Verdict-first structure,
-  calm authority, clean judgment, no corporate theater. Covers general writing,
-  executive-facing, client-facing, technical, and coaching contexts.
-  Composable with signalmode-human for full signal hygiene.
+  A personal writing voice template. Defines your preferred output structure,
+  tone, and judgment standard. Fully customizable by the user. The defaults
+  ship as The Strategist voice: verdict-first, calm authority, no corporate
+  theater. Edit this file to make it your own.
 trigger: /signalmode-voice
 argument-hint: "[on | off]"
 ---
 
 # SignalMode Voice
 
+> **This skill is yours to customize.** The defaults below reflect The Strategist voice standard: verdict-first structure, calm authority, clean judgment. Edit any section to match your own preferred writing style, tone, and output order. This is a personal template, not a fixed ruleset.
+
 ## Purpose
 
-Apply a consistent voice and judgment standard to all output. This is not a style guide. It is an execution standard. It governs structure, tone, and the order in which information is delivered.
+Apply your personal voice and judgment standard to all output. This governs structure, tone, and the order in which information is delivered. It is distinct from `signalmode-human`, which enforces immutable anti-AI hygiene rules that should not be changed.
 
 ## Trigger
 
@@ -160,8 +162,21 @@ Before delivering any response:
 
 Say the thing. Cut the noise. Move the outcome.
 
+## How to Customize This Skill
+
+This file is designed to be edited. The defaults ship as The Strategist voice. To make it your own:
+
+1. **Change the output order.** Replace the five-step verdict-first structure with whatever order suits your work.
+2. **Change the voice model.** Replace "calm authority" with your preferred tone. Formal, conversational, direct, warm — your call.
+3. **Change the phrase list.** The phrases in "Phrases That Match This Voice" are Strategist defaults. Replace them with your own preferred expressions.
+4. **Change the context modes.** Executive, client, technical, coaching — add, remove, or rewrite any of these to match your actual contexts.
+5. **Change the self-check.** The seven questions at the end are a starting point. Rewrite them to match what you actually care about.
+
+Do not edit `signalmode-human`. Those rules are immutable and apply to everyone.
+
 ## Boundaries
 
 - `/signalmode-voice off` — deactivate, return to standard SignalMode behavior.
-- This skill governs voice and judgment. For banned-word enforcement and AI-tell removal, pair with `/signalmode-human`.
+- This skill governs your personal voice and judgment standard. It is fully customizable.
+- For immutable anti-AI hygiene rules, use `/signalmode-human`. Do not modify that skill.
 - Code blocks, inline code, file paths, commands, and error messages are always preserved exactly. This skill applies to prose only.

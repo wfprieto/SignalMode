@@ -13,8 +13,8 @@ Works with Claude Code, ChatGPT, Codex, Gemini, Copilot, Cursor, Windsurf, Repli
 | Skill | What it gives you |
 |---|---|
 | **signalmode** | Core signal: drop filler, keep substance. Terse but never cryptic. |
-| **signalmode-voice** | The Strategist voice standard: verdict-first, calm authority, no corporate theater. |
-| **signalmode-human** | Anti-AI writing hygiene: removes every detectable AI tell from output. |
+| **signalmode-voice** | Your personal writing voice template (customizable). Ships with The Strategist voice: verdict-first, calm authority, no corporate theater. |
+| **signalmode-human** | Immutable anti-AI hygiene rules. Removes every detectable AI writing tell. Do not edit. |
 | **signalmode-basic-english** | Forces plain, layman-friendly reports. 5-section structure. Assumes the reader knows nothing about code or platforms. |
 | **signalmode-compress** | Rewrites memory files (CLAUDE.md, AGENTS.md, etc.) into compressed form — save tokens every future session. |
 | **signalmode-stats** | Real token savings from your session log. No estimates. |
@@ -112,29 +112,27 @@ Compiles the active session into a lean, verifiable continuation contract. Use w
 /signalmode-refresh ultra
 ```
 
-### `/signalmode-voice` — The Strategist voice standard
+### `/signalmode-voice` — Your personal voice template
 
-Applies a verdict-first, judgment-driven voice to all output. Calm authority. Clean judgment. No corporate theater. Covers executive-facing, client-facing, technical, and coaching contexts.
+A customizable writing voice template. Ships with The Strategist voice as the default: verdict-first structure, calm authority, clean judgment, no corporate theater. **Edit `skills/signalmode-voice/SKILL.md` to make it your own.** Change the output order, tone, phrase list, and context modes to match how you actually write.
 
 ```bash
 /signalmode-voice
 /signalmode-voice off
 ```
 
-Output order: verdict, reason, risk or tradeoff, next move, proof (only if needed). Every response leads with the decision. No warm-up.
+### `/signalmode-human` — Immutable anti-AI hygiene
 
-### `/signalmode-human` — Anti-AI writing hygiene
-
-Removes every detectable AI writing tell. Enforces a comprehensive banned-word, banned-phrase, banned-structure, and banned-punctuation ruleset. Output reads like a sharp, experienced person wrote it.
+**Do not edit this skill.** These rules are fixed and apply universally. Removes every detectable AI writing tell: banned words, banned phrases, banned sentence structures, banned punctuation habits, and banned formatting patterns.
 
 ```bash
 /signalmode-human
 /signalmode-human off
 ```
 
-Bans: delve, leverage, utilize, robust, seamless, holistic, em dashes, fake-suspense phrases, helpful-bot openers, hedge-stacking, self-posed questions, over-formatting, and 200+ other AI tells.
+Bans: delve, leverage, utilize, robust, seamless, holistic, em dashes, fake-suspense phrases, helpful-bot openers, hedge-stacking, self-posed questions, over-formatting, and 200+ other AI tells. These rules do not change.
 
-**Pair `/signalmode-voice` and `/signalmode-human` together for full signal hygiene** — voice governs structure and judgment, human governs vocabulary and pattern.
+**Use both together for full signal hygiene.** Voice is yours to customize. Human is immutable.
 
 ### `/signalcrew` — Multi-agent crew
 

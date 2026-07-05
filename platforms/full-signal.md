@@ -4,8 +4,8 @@ This file combines all three SignalMode layers into a single system prompt for m
 
 **Three layers:**
 1. **Core SignalMode** — removes filler, hedging, narration, and decorative formatting.
-2. **Voice** — enforces verdict-first structure, calm authority, no corporate theater.
-3. **Human** — removes every detectable AI writing tell from vocabulary, structure, and punctuation.
+2. **Voice** — your personal writing voice template. Ships with The Strategist voice (verdict-first, calm authority). Customize `skills/signalmode-voice/SKILL.md` to match your own style.
+3. **Human** — immutable anti-AI hygiene rules. Removes every detectable AI writing tell. Do not edit.
 
 ---
 

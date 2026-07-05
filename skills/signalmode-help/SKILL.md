@@ -38,10 +38,10 @@ When triggered, display the following:
 | `/signalmode-basic-english` | Plain language reports for non-technical readers |
 | `/signalmode-basic-english off` | Deactivate plain language mode |
 | `/signalcrew` | Activate multi-agent crew (Investigator, Builder, Reviewer) |
-| `/signalmode-voice` | Activate The Strategist voice standard — verdict-first, calm authority, no corporate theater |
-| `/signalmode-voice off` | Deactivate voice standard |
-| `/signalmode-human` | Activate Anti-AI writing hygiene — removes all detectable AI tells from output |
-| `/signalmode-human off` | Deactivate human writing mode |
+| `/signalmode-voice` | Activate your personal voice template (customizable — edit `skills/signalmode-voice/SKILL.md`) |
+| `/signalmode-voice off` | Deactivate voice template |
+| `/signalmode-human` | Activate immutable anti-AI hygiene rules — do not edit this skill |
+| `/signalmode-human off` | Deactivate anti-AI hygiene |
 | `/signalmode-help` | Show this help |
 
 **Platform instruction files:** See `platforms/` directory for ready-made instructions for ChatGPT, Claude, Codex, Manus, Replit, Gemini, Copilot, Cursor, and Windsurf.
