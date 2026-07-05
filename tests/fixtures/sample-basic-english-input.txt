@@ -1,0 +1,1 @@
+The Supabase RLS policies are not configured. The auth.uid() function is not returning the correct value in the context of the service role key. The POSTGRES_URL env var needs to be set in the Vercel project settings. The migration has not been run against the production database.

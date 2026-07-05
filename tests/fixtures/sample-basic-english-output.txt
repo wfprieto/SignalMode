@@ -1,0 +1,22 @@
+## What happened?
+The app's database security settings were checked. The rules that control who can read and save information are not set up correctly. The app also has not been told where to find the database when it runs on the live server.
+
+## What is the result?
+Not working.
+
+## Why does it matter?
+Users cannot save or load their information. If someone creates an account or fills in a form, the data disappears. The app cannot function until this is fixed.
+
+## What is needed?
+Three things must be set up:
+
+1. Supabase (https://supabase.com), the service that stores the app's information, must have its security rules turned on and configured.
+2. Vercel (https://vercel.com), the service that runs the live version of the app, must be told the address of the database. This is a setting called POSTGRES_URL.
+3. The database setup script must be run once against the live database to create the correct tables.
+
+## What happens next?
+1. Log in to Supabase and turn on Row Level Security for each table.
+2. Add the database address (POSTGRES_URL) to the Vercel project settings.
+3. Run the database setup script.
+4. Test saving information in the live app.
+5. Confirm the information is still there after refreshing the page.

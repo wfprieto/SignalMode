@@ -1,0 +1,83 @@
+version: 1.0.0
+description: "Machine-readable platform capability registry."
+
+platforms:
+  claude:
+    name: "Claude Web"
+    support: native
+    install: manual
+    persistence: project-file
+    tested: true
+    generator_target: "claude.md"
+
+  claudecode:
+    name: "Claude Code"
+    support: native
+    install: automatic
+    persistence: hooks
+    tested: true
+    generator_target: "claudecode.md"
+
+  chatgpt:
+    name: "ChatGPT"
+    support: instructions-only
+    install: manual
+    persistence: account-setting
+    tested: true
+    generator_target: "chatgpt.md"
+
+  codex:
+    name: "Codex"
+    support: instructions-only
+    install: manual
+    persistence: project-file
+    tested: true
+    generator_target: "codex.md"
+
+  copilot:
+    name: "GitHub Copilot"
+    support: instructions-only
+    install: manual
+    persistence: custom-instructions
+    tested: true
+    generator_target: "copilot.md"
+
+  cursor:
+    name: "Cursor"
+    support: native
+    install: automatic
+    persistence: cursorrules
+    tested: true
+    generator_target: "cursor.md"
+
+  gemini:
+    name: "Gemini"
+    support: instructions-only
+    install: manual
+    persistence: gemini-file
+    tested: true
+    generator_target: "gemini.md"
+
+  manus:
+    name: "Manus AI"
+    support: native
+    install: manual
+    persistence: skill-file
+    tested: true
+    generator_target: "manus.md"
+
+  replit:
+    name: "Replit Agent"
+    support: native
+    install: manual
+    persistence: agent-instructions
+    tested: true
+    generator_target: "replit.md"
+
+  windsurf:
+    name: "Windsurf"
+    support: native
+    install: automatic
+    persistence: windsurfrules
+    tested: true
+    generator_target: "windsurf.md"

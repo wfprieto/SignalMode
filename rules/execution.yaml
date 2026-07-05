@@ -1,0 +1,31 @@
+version: 1.0.0
+policy:
+  stability: protected
+  change_control: review-required
+description: "Rules governing task execution, assumptions, and blockers."
+
+decision_levels:
+  level_1_safe_assumption:
+    description: "Proceed and record it."
+  level_2_reversible_decision:
+    description: "Proceed using the lowest-risk option."
+  level_3_material_ambiguity:
+    description: "Ask one focused question or present options."
+  level_4_hard_blocker:
+    description: "Stop because continuation could cause damage or invalidate the work."
+    triggers:
+      - "missing critical access"
+      - "destructive action without approval"
+      - "unresolved security issue"
+      - "contradictory canonical requirements"
+      - "legal or financial decision outside authorization"
+      - "missing information that makes the output unreliable"
+
+report_contract:
+  format: |
+    Result: Complete | Partial | Blocked | Failed
+    Changed: <brief list>
+    Verified: <what was tested>
+    Not verified: <what was not tested>
+    Blocked by: <blocker if any>
+    Next action: <next step>

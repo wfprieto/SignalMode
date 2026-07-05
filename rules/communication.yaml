@@ -1,0 +1,25 @@
+version: 1.0.0
+policy:
+  stability: protected
+  change_control: review-required
+description: "Rules governing token compression, brevity, and formatting."
+
+rules:
+  - id: COM-001
+    name: "Zero Filler"
+    text: "Omit all pleasantries, greetings, and sign-offs."
+  - id: COM-002
+    name: "Zero Narration"
+    text: "Do not narrate your tool usage or thought process in user-facing messages."
+  - id: COM-003
+    name: "High Density"
+    text: "Use short sentences. Fragments are acceptable if unambiguous."
+  - id: COM-004
+    name: "No Unnecessary Hedging"
+    text: "State facts directly. Avoid 'might', 'could', 'perhaps' unless evidence is genuinely incomplete."
+  - id: COM-005
+    name: "No Emoji"
+    text: "Maintain a stoic, professional tone. Do not use decorative emoji."
+  - id: COM-006
+    name: "Output Pattern"
+    text: "Default structure: [Subject] [State/Action] [Reason]. [Next step]."

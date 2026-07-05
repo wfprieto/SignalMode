@@ -32,7 +32,10 @@ jobs:
                    src/hooks/signalmode-activate.js \
                    src/hooks/signalmode-mode-tracker.js \
                    src/hooks/signalmode-config.js \
-                   src/hooks/signalcrew-model-overrides.js; do
+                   src/hooks/signalcrew-model-overrides.js \
+                   scripts/generate-platforms.js \
+                   scripts/validate-repository.js \
+                   scripts/lint-prompts.js; do
             node --check "$f" && echo "OK: $f" || { echo "FAIL: $f"; exit 1; }
           done
 
@@ -51,24 +54,44 @@ jobs:
           echo "=== Checking for original brand identifiers ==="
           HITS=$(grep -rni "caveman\|julius\|brussee\|cavecrew\|dancing-rock\|atlas-cloud" \
             --include="*.md" --include="*.js" --include="*.py" --include="*.json" \
-            --include="*.sh" --include="*.ps1" . 2>/dev/null | wc -l)
+            --include="*.sh" --include="*.ps1" --include="*.yaml" . 2>/dev/null | wc -l)
           if [ "$HITS" -gt 0 ]; then
             echo "FAIL: Brand contamination found ($HITS hits)"
             grep -rni "caveman\|julius\|brussee\|cavecrew\|dancing-rock\|atlas-cloud" \
               --include="*.md" --include="*.js" --include="*.py" --include="*.json" \
-              --include="*.sh" --include="*.ps1" .
+              --include="*.sh" --include="*.ps1" --include="*.yaml" .
             exit 1
           fi
           echo "OK: Zero brand contamination"
 
-      - name: Validate package.json
+      - name: Version consistency check
         run: |
-          echo "=== Checking package.json ==="
-          node -e "const p=require('./package.json'); \
-            if(!p.name||!p.version||!p.author) { \
-              console.error('FAIL: Missing required fields'); process.exit(1); \
-            } \
-            console.log('OK: name=' + p.name + ' version=' + p.version + ' author=' + p.author);"
+          echo "=== Checking version consistency ==="
+          PKG_VERSION=$(node -e "import('./package.json', {assert:{type:'json'}}).then(m=>console.log(m.default.version))" 2>/dev/null || node -p "require('./package.json').version" 2>/dev/null || cat package.json | grep '"version"' | head -1 | sed 's/.*: "\(.*\)".*/\1/')
+          echo "package.json version: $PKG_VERSION"
+          # All SKILL.md files must have a version field
+          MISSING=0
+          for f in skills/*/SKILL.md; do
+            if ! grep -q "^version:" "$f"; then
+              echo "WARN: No version field in $f"
+            fi
+          done
+          # Rule files must have version fields
+          for f in rules/*.yaml; do
+            if ! grep -q "^version:" "$f"; then
+              echo "FAIL: Missing version in $f"
+              MISSING=1
+            else
+              echo "OK: $f"
+            fi
+          done
+          if [ "$MISSING" -gt 0 ]; then exit 1; fi
+
+      - name: Run repository validator
+        run: node scripts/validate-repository.js
+
+      - name: Run prompt linter
+        run: node scripts/lint-prompts.js
 
       - name: Validate SKILL.md triggers
         run: |
@@ -90,4 +113,15 @@ jobs:
               exit 1
             fi
             echo "OK: platforms/${p}.md"
+          done
+
+      - name: Check rule files exist
+        run: |
+          echo "=== Checking rule files ==="
+          for r in precedence integrity communication human-writing execution; do
+            if [ ! -f "rules/${r}.yaml" ]; then
+              echo "FAIL: Missing rules/${r}.yaml"
+              exit 1
+            fi
+            echo "OK: rules/${r}.yaml"
           done

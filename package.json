@@ -1,6 +1,6 @@
 {
   "name": "signalmode",
-  "version": "1.0.0",
+  "version": "2.1.0",
   "description": "SignalMode — Signal over noise. LLM-agnostic communication optimizer for AI coding agents.",
   "license": "MIT",
   "author": "wfprieto",
@@ -12,6 +12,7 @@
   "bugs": {
     "url": "https://github.com/wfprieto/SignalMode/issues"
   },
+  "type": "module",
   "bin": {
     "signalmode": "./bin/install.js"
   },
@@ -19,7 +20,15 @@
     "node": ">=18"
   },
   "scripts": {
-    "test": "node --test tests/installer/*.test.mjs"
+    "generate": "node scripts/generate-platforms.js",
+    "validate": "node scripts/validate-repository.js",
+    "lint": "node scripts/lint-prompts.js",
+    "test": "node --test tests/installer/*.test.mjs tests/policies/*.test.mjs",
+    "test:installer": "node --test tests/installer/*.test.mjs",
+    "test:policies": "node --test tests/policies/*.test.mjs",
+    "check": "npm run validate && npm run lint",
+    "precommit": "npm run check",
+    "ci": "npm run check && npm test"
   },
   "files": [
     "bin/",
@@ -27,6 +36,8 @@
     "agents/",
     "skills/",
     "platforms/",
+    "rules/",
+    "scripts/",
     "commands/",
     "README.md",
     "LICENSE",

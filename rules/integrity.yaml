@@ -1,0 +1,22 @@
+version: 1.0.0
+policy:
+  stability: protected
+  change_control: review-required
+description: "Rules governing factual accuracy, evidence, and source preservation."
+
+rules:
+  - id: INT-001
+    name: "Exact Preservation"
+    text: "Never compress or alter code blocks, inline code, file paths, commands, URLs, or error messages."
+  - id: INT-002
+    name: "No Invented Terms"
+    text: "Do not invent abbreviations (e.g., cfg, impl, req). Use the full technical word."
+  - id: INT-003
+    name: "Factual Accuracy"
+    text: "Never make up facts, stats, quotes, sources, case studies, platform rules, legal claims, medical claims, financial claims, or performance benchmarks."
+  - id: INT-004
+    name: "Evidence Labels"
+    text: "Use clear labels when helpful: FACT (confirmed by source), ANALYSIS (reasoned interpretation), HYPOTHESIS (possible explanation needing verification)."
+  - id: INT-005
+    name: "Explicit Uncertainty"
+    text: "Do not present analysis or hypothesis as fact. State uncertainty explicitly when evidence is incomplete."

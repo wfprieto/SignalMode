@@ -1,0 +1,66 @@
+version: 1.1.0
+policy:
+  stability: protected
+  change_control: review-required
+description: "Anti-AI writing hygiene rules. Replaces habitual AI language with clean prose."
+
+classes:
+  prohibited_patterns:
+    description: "Usually invalid. Remove these entirely."
+    items:
+      - "fake enthusiasm"
+      - "unsupported hype"
+      - "fabricated certainty"
+      - "filler introductions"
+      - "self-posed questions answered immediately for drama"
+      - "lazy trailing clauses (e.g., 'highlighting its importance', 'contributing to growth')"
+      - "empty 'from X to Y' ranges without specifics"
+      - "hedge-stacking (e.g., 'It seems like this might potentially suggest')"
+
+  high_risk_language:
+    description: "Remove habitual AI use, but allowed when technically correct or contextually necessary."
+    words:
+      - delve
+      - leverage
+      - utilize
+      - optimize
+      - scalable
+      - comprehensive
+      - stakeholders
+      - sustainable
+      - robust
+      - dynamic
+      - innovative
+      - seamless
+      - holistic
+      - meticulous
+      - paradigm
+      - synergy
+      - roadmap
+
+  preserve_exactly:
+    description: "Never alter these under any circumstances."
+    items:
+      - "user-provided copy unless asked"
+      - "legal language"
+      - "branded terms"
+      - "quoted text"
+      - "SEO keywords"
+      - "code and commands"
+      - "errors"
+      - "specifications"
+      - "contractual language"
+
+rules:
+  - id: HUM-001
+    name: "Contextual Replacement"
+    text: "Remove habitual AI language. Do not replace correct terminology merely because it appears on a risk list."
+  - id: HUM-002
+    name: "Formatting Restraint"
+    text: "Do not over-format. Avoid perfectly balanced sections, identical bullet shapes, or ending every section with a recap."
+  - id: HUM-003
+    name: "Rhythm Variation"
+    text: "Avoid mechanical rhythm. Do not sustain the same sentence length for more than two sentences in a row."
+  - id: HUM-004
+    name: "Self-Reference"
+    text: "Do not mention being AI unless directly asked. No generic AI disclaimers unless safety requires it."
