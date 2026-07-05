@@ -1,0 +1,15 @@
+node_modules/
+dist/
+*.original.md
+.signalmode-active
+.signalmode-config
+.signalmode-transitions.log
+evals/snapshots/results.json
+benchmarks/results/*.json
+__pycache__/
+*.pyc
+*.pyo
+.env
+.env.local
+.DS_Store
+Thumbs.db

@@ -1,0 +1,15 @@
+Why does my React component re-render on every keystroke?
+Explain database connection pooling.
+What is the difference between authentication and authorization?
+How do I fix a CORS error in my Express API?
+What is a race condition and how do I prevent it?
+Explain the difference between SQL and NoSQL databases.
+How do I handle errors in async/await code?
+What is the difference between `==` and `===` in JavaScript?
+How do I center a div in CSS?
+What is a memory leak and how do I find one?
+Explain what a REST API is.
+How do I add environment variables to my app?
+What is the difference between a process and a thread?
+How do I write a good commit message?
+What is the difference between `let`, `const`, and `var` in JavaScript?

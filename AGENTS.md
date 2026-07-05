@@ -1,0 +1,9 @@
+@./skills/signalmode/SKILL.md
+@./skills/signalmode-commit/SKILL.md
+@./skills/signalmode-review/SKILL.md
+@./skills/signalmode-compress/SKILL.md
+@./skills/signalmode-basic-english/SKILL.md
+@./skills/signalmode-refresh/SKILL.md
+@./skills/signalcrew/SKILL.md
+@./skills/signalmode-voice/SKILL.md
+@./skills/signalmode-human/SKILL.md
