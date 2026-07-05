@@ -21,7 +21,7 @@ Report real token counts and estimated savings for the current session. Numbers 
 
 ## How it works
 
-This skill is delivered by `src/hooks/signalmode-stats.js`, which is read by `src/hooks/signalmode-mode-tracker.js` on `/signalmode-stats`. The model does not compute the numbers — the hook returns `decision: "block"` with the formatted stats as the reason. The user sees the numbers immediately.
+This skill is delivered by `src/hooks/signalmode-mode-tracker.js` on `/signalmode-stats`. The model does not compute the numbers — the hook returns `decision: "block"` with the formatted stats as the reason. The user sees the numbers immediately.
 
 ## Output Format
 

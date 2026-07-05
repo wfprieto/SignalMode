@@ -6,7 +6,7 @@ description: >
   with precision. Cuts token waste, reduces cost, and makes every response
   actually useful. LLM-agnostic. Works across all major AI coding agents.
 trigger: /signalmode
-argument-hint: "[lite | full | ultra | wenyan-lite | wenyan-full | off]"
+argument-hint: "[lite | full | ultra | wenyan-lite | wenyan-full | wenyan-ultra | off]"
 ---
 
 # SignalMode

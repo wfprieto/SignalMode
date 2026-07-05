@@ -31,6 +31,79 @@ process.stdin.on('end', () => {
     return;
   }
 
+  // /signalmode-refresh
+  if (/^\/signalmode-refresh\b/.test(message)) {
+    const mode = 'refresh';
+    setDefaultMode(mode, claudeDir);
+    recordModeChange(claudeDir, mode);
+    safeWriteFlag(flagPath, mode);
+    respond({ decision: 'block', reason: 'SignalMode Refresh activated. Compiling session into a lean continuation handoff.' });
+    return;
+  }
+
+  // /signalmode-compress
+  if (/^\/signalmode-compress\b/.test(message)) {
+    if (/\brestore\b/.test(message)) {
+      respond({ decision: 'block', reason: 'SignalMode Compress Restore activated. Ready to restore memory file from backup.' });
+      return;
+    }
+    const mode = 'compress';
+    setDefaultMode(mode, claudeDir);
+    recordModeChange(claudeDir, mode);
+    safeWriteFlag(flagPath, mode);
+    respond({ decision: 'block', reason: 'SignalMode Compress activated. Ready to compress memory files.' });
+    return;
+  }
+
+  // /signalmode-review
+  if (/^\/signalmode-review\b/.test(message)) {
+    const mode = 'review';
+    setDefaultMode(mode, claudeDir);
+    recordModeChange(claudeDir, mode);
+    safeWriteFlag(flagPath, mode);
+    respond({ decision: 'block', reason: 'SignalMode Review activated. Adversarial code review pass.' });
+    return;
+  }
+
+  // /signalmode-commit
+  if (/^\/signalmode-commit\b/.test(message)) {
+    const mode = 'commit';
+    setDefaultMode(mode, claudeDir);
+    recordModeChange(claudeDir, mode);
+    safeWriteFlag(flagPath, mode);
+    respond({ decision: 'block', reason: 'SignalMode Commit activated. Generating precise conventional commit message.' });
+    return;
+  }
+
+  // /signalcrew
+  const crewMatch = message.match(/^\/signalcrew(?:\s+(investigate|build|review|off))?(?:\s+(.+))?$/i);
+  if (crewMatch) {
+    const action = (crewMatch[1] || '').toLowerCase();
+    if (action === 'off') {
+      const mode = 'off';
+      setDefaultMode(mode, claudeDir);
+      recordModeChange(claudeDir, mode);
+      try { fs.unlinkSync(flagPath); } catch (e) {}
+      respond({ decision: 'block', reason: 'SignalCrew deactivated. Normal response mode restored.' });
+      return;
+    }
+    const mode = 'signalcrew';
+    setDefaultMode(mode, claudeDir);
+    recordModeChange(claudeDir, mode);
+    safeWriteFlag(flagPath, mode);
+    
+    if (action === 'investigate') {
+      respond({ decision: 'block', reason: 'SignalCrew Investigator activated. Auditing codebase and preparing brief.' });
+    } else if (action === 'build') {
+      respond({ decision: 'block', reason: 'SignalCrew Builder activated. Implementing against the spec.' });
+    } else if (action === 'review') {
+      respond({ decision: 'block', reason: 'SignalCrew Reviewer activated. Performing adversarial review pass.' });
+    } else {
+      respond({ decision: 'block', reason: 'SignalCrew activated. Multi-agent crew ready for spec-driven development.' });
+    }
+    return;
+  }
+
   // /signalmode-help
   if (/^\/signalmode-help\b/.test(message)) {
     const helpText = readSkillContent('signalmode-help', 'SKILL.md');

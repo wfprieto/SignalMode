@@ -11,7 +11,7 @@ const os   = require('os');
 const { execSync, spawnSync } = require('child_process');
 
 const REPO    = 'wfprieto/SignalMode';
-const VERSION = '1.0.0';
+const VERSION = '2.0.0';
 
 // ── Entry point ────────────────────────────────────────────────────────────
 checkNodeVersion();
@@ -94,6 +94,34 @@ const PROVIDERS = [
     detect: 'vscode-ext:saoudrizwan.claude-dev',
     mech: 'cline-instructions',
     soft: true,
+  },
+  {
+    id: 'chatgpt',
+    label: 'ChatGPT',
+    detect: '',
+    mech: 'manual',
+    platformFile: 'chatgpt.md',
+  },
+  {
+    id: 'claude-web',
+    label: 'Claude (web)',
+    detect: '',
+    mech: 'manual',
+    platformFile: 'claude.md',
+  },
+  {
+    id: 'manus',
+    label: 'Manus',
+    detect: '',
+    mech: 'manual',
+    platformFile: 'manus.md',
+  },
+  {
+    id: 'gemini',
+    label: 'Gemini',
+    detect: '',
+    mech: 'manual',
+    platformFile: 'gemini.md',
   },
 ];
 
@@ -233,14 +261,16 @@ function installClaudeCode(provider, repoRoot, opts, say, note, warn) {
     });
     if (opts.dryRun) { note('  [dry-run] would install claude plugin'); return { ok: true }; }
     if (r.status === 0) { note('  Claude Code plugin installed'); return { ok: true }; }
-    // Fallback: write skills directly to ~/.claude/skills/
+    // Fallback: write skills directly to CLAUDE_CONFIG_DIR/skills/
+    const claudeDir = process.env.CLAUDE_CONFIG_DIR || path.join(os.homedir(), '.claude');
     return installSkillsToDir(
-      path.join(os.homedir(), '.claude', 'skills'),
+      path.join(claudeDir, 'skills'),
       repoRoot, opts, say, note, warn
     );
   } catch (e) {
+    const claudeDir = process.env.CLAUDE_CONFIG_DIR || path.join(os.homedir(), '.claude');
     return installSkillsToDir(
-      path.join(os.homedir(), '.claude', 'skills'),
+      path.join(claudeDir, 'skills'),
       repoRoot, opts, say, note, warn
     );
   }

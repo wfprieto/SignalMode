@@ -11,7 +11,7 @@ const VALID_MODES = new Set([
   'lite', 'full', 'ultra',
   'wenyan', 'wenyan-lite', 'wenyan-full', 'wenyan-ultra',
   'commit', 'review', 'compress', 'basic-english', 'refresh',
-  'voice', 'human',
+  'voice', 'human', 'signalcrew',
   'off',
 ]);
 

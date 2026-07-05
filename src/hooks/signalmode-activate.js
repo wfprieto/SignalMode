@@ -44,7 +44,7 @@ safeWriteFlag(flagPath, mode);
 //
 //    Reads SKILL.md at runtime so edits propagate automatically.
 
-const INDEPENDENT_MODES = new Set(['commit', 'review', 'compress', 'basic-english', 'refresh', 'voice', 'human']);
+const INDEPENDENT_MODES = new Set(['commit', 'review', 'compress', 'basic-english', 'refresh', 'voice', 'human', 'signalcrew']);
 if (INDEPENDENT_MODES.has(mode)) {
   process.stdout.write('SIGNALMODE ACTIVE — level: ' + mode + '. Behavior defined by /signalmode-' + mode + ' skill.');
   process.exit(0);

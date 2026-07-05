@@ -87,5 +87,6 @@ Rewrite memory files into compressed form to reduce input tokens on every future
 - NEVER modify: .py, .js, .ts, .json, .yaml, .yml, .toml, .env, .lock, .css, .html, .xml, .sql, .sh
 - If file has mixed content (prose + code), compress ONLY the prose sections
 - If unsure whether something is code or prose, leave it unchanged
-- Original file is backed up as FILE.original.md before overwriting
-- Never compress FILE.original.md (skip it)
+- Original file is backed up as FILE.original.md before overwriting.
+- To restore the original file, use `/signalmode-compress restore <filepath>`.
+- Never compress FILE.original.md (skip it).

@@ -64,6 +64,11 @@ Coordinate three specialized agents to deliver spec-driven work with built-in qu
 
 ---
 
+## Trigger
+
+`/signalcrew` — activate crew mode.
+`/signalcrew off` — deactivate crew mode.
+
 ## Full Crew Workflow
 
 `/signalcrew <task or spec>` — runs all three agents in sequence:
@@ -78,6 +83,7 @@ Coordinate three specialized agents to deliver spec-driven work with built-in qu
 - Each agent operates within its defined scope. The Investigator does not build. The Builder does not review. The Reviewer does not implement.
 - If a blocker is found at any stage, the crew stops and reports the blocker. It does not proceed past a blocker.
 - All agents use SignalMode compression in their outputs by default.
+- Agents are defined in `agents/signalcrew-investigator.md`, `agents/signalcrew-builder.md`, and `agents/signalcrew-reviewer.md`.
 - The crew does not make irreversible changes (database migrations, production deployments, permission changes) without explicit user approval.
 
 ## Boundaries
