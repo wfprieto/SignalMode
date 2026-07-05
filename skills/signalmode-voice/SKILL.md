@@ -158,10 +158,6 @@ Before delivering any response:
 - Did I remove filler and assistant voice?
 - Did I define scope and done where needed?
 
-## Final Rule
-
-Say the thing. Cut the noise. Move the outcome.
-
 ## How to Customize This Skill
 
 This file is designed to be edited. The defaults ship as The Strategist voice. To make it your own:
@@ -173,6 +169,10 @@ This file is designed to be edited. The defaults ship as The Strategist voice. T
 5. **Change the self-check.** The seven questions at the end are a starting point. Rewrite them to match what you actually care about.
 
 Do not edit `signalmode-human`. Those rules are immutable and apply to everyone.
+
+## Final Rule
+
+Say the thing. Cut the noise. Move the outcome.
 
 ## Boundaries
 

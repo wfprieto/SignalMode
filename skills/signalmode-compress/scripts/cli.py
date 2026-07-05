@@ -11,8 +11,24 @@ from .validate import validate_output
 
 def main() -> int:
     if len(sys.argv) < 2:
-        print("Usage: python3 -m scripts <filepath>", file=sys.stderr)
+        print("Usage: python3 -m scripts [restore] <filepath>", file=sys.stderr)
         return 2
+
+    if sys.argv[1] == "restore":
+        if len(sys.argv) < 3:
+            print("Usage: python3 -m scripts restore <filepath>", file=sys.stderr)
+            return 2
+        filepath = os.path.abspath(sys.argv[2])
+        backup_path = filepath + '.original.md' if not filepath.endswith('.md') else filepath.replace('.md', '.original.md')
+        if not os.path.exists(backup_path):
+            print(f"signalmode-compress: backup file not found: {backup_path}", file=sys.stderr)
+            return 1
+        with open(backup_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+        with open(filepath, 'w', encoding='utf-8') as f:
+            f.write(content)
+        print(f"Restored {filepath} from {backup_path}")
+        return 0
 
     filepath = os.path.abspath(sys.argv[1])
 

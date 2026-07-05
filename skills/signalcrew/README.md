@@ -9,6 +9,7 @@ Multi-agent crew for spec-driven development. Three agents — Investigator, Bui
 /signalcrew investigate <task> — Run only the Investigator
 /signalcrew build <task>       — Run only the Builder
 /signalcrew review             — Run only the Reviewer on recent output
+/signalcrew off                — Deactivate crew mode
 ```
 
 ## Agents

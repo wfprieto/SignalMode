@@ -23,12 +23,12 @@ For manual install, add to `~/.claude/settings.json`:
   "hooks": {
     "SessionStart": [
       {
-        "hooks": [{ "type": "command", "command": "node ~/.claude/hooks/signalmode-activate.js" }]
+        "hooks": [{ "type": "command", "command": "node $CLAUDE_CONFIG_DIR/hooks/signalmode-activate.js" }]
       }
     ],
     "PreToolUse": [
       {
-        "hooks": [{ "type": "command", "command": "node ~/.claude/hooks/signalmode-mode-tracker.js" }]
+        "hooks": [{ "type": "command", "command": "node $CLAUDE_CONFIG_DIR/hooks/signalmode-mode-tracker.js" }]
       }
     ]
   }

@@ -29,6 +29,7 @@ When triggered, display the following:
 | `/signalmode ultra` | Ultra mode — maximum compression |
 | `/signalmode off` | Deactivate, return to normal |
 | `/signalmode-compress <file>` | Compress a memory file to save tokens every session |
+| `/signalmode-compress restore <file>` | Restore original memory file from backup |
 | `/signalmode-stats` | Show real token usage and savings for this session |
 | `/signalmode-review` | Adversarial code review — find every real problem |
 | `/signalmode-commit` | Write a precise conventional commit message |

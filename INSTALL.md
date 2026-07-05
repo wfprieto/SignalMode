@@ -14,7 +14,7 @@ Auto-detects installed AI coding agents and installs SignalMode for each one.
 
 | Agent | Auto-detect | Install method | Always-on | Platform file |
 |---|---|---|---|---|
-| **Claude Code** | `claude` on PATH | Plugin install | Yes (hooks) | — |
+| **Claude Code** | `claude` on PATH | Plugin install | Yes (hooks) | `platforms/claudecode.md` |
 | **Cursor** | `cursor` on PATH or `~/.cursor` | `.cursorrules` | Yes | `platforms/cursor.md` |
 | **Windsurf** | `windsurf` on PATH or `~/.codeium` | `.windsurfrules` | Yes | `platforms/windsurf.md` |
 | **GitHub Copilot** | `gh` on PATH or VSCode extension | `.github/copilot-instructions.md` | Yes | `platforms/copilot.md` |
@@ -42,6 +42,8 @@ cat platforms/claude.md      # Claude System Prompt
 cat platforms/gemini.md      # Gemini System Instructions
 cat platforms/manus.md       # Manus Project Instructions
 cat platforms/replit.md      # Replit AI Instructions
+cat platforms/codex.md       # Codex System Prompt
+cat platforms/claudecode.md  # Claude Code (manual fallback)
 ```
 
 ---
