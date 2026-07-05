@@ -1,3 +1,4 @@
+# Rule precedence: rules/precedence.yaml governs all conflicts between skills.
 @./skills/signalmode/SKILL.md
 @./skills/signalmode-commit/SKILL.md
 @./skills/signalmode-review/SKILL.md

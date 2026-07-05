@@ -9,4 +9,4 @@
 | Missing test files | `package.json` test script references `tests/installer/*.test.mjs` | `tests/` directory is empty | Unresolved |
 | Missing matrix row | `platforms/claudecode.md` exists | `INSTALL.md` matrix is missing the row | Unresolved |
 | Duplicated files | `AGENTS.md` | `GEMINI.md` is identical | Unresolved |
-| Unsupported claim | `README.md` claims "65-75% token savings" | `evals/README.md` provides no benchmark data | Unresolved |
+| Unsupported claim | `README.md` claims "up to 70% (estimated, unverified) token savings" | `evals/README.md` provides no benchmark data | Unresolved |

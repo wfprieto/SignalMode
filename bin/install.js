@@ -13,14 +13,6 @@ const { execSync, spawnSync } = require('child_process');
 const REPO    = 'wfprieto/SignalMode';
 const VERSION = '2.0.0';
 
-// ── Entry point ────────────────────────────────────────────────────────────
-checkNodeVersion();
-checkWslWindowsNode();
-const opts = parseArgs(process.argv.slice(2));
-if (opts.help)     { printHelp(); process.exit(0); }
-if (opts.listOnly) { printProviders(); process.exit(0); }
-main(opts).catch(err => { process.stderr.write(err.message + '\n'); process.exit(1); });
-
 // ── Provider matrix ────────────────────────────────────────────────────────
 // Single source of truth for all supported AI coding agents.
 // Each entry: id, label, detect (clause spec), mech (install mechanism), optional soft flag.
@@ -124,6 +116,14 @@ const PROVIDERS = [
     platformFile: 'gemini.md',
   },
 ];
+
+// ── Entry point ────────────────────────────────────────────────────────────
+checkNodeVersion();
+checkWslWindowsNode();
+const opts = parseArgs(process.argv.slice(2));
+if (opts.help)     { printHelp(); process.exit(0); }
+if (opts.listOnly) { printProviders(); process.exit(0); }
+main(opts).catch(err => { process.stderr.write(err.message + '\n'); process.exit(1); });
 
 // ── Main ───────────────────────────────────────────────────────────────────
 async function main(opts) {

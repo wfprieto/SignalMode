@@ -120,3 +120,4 @@ Never announce the mode. No "SignalMode activated", no third-person tags, no "si
 - `/signalmode off` or "stop signalmode" or "normal mode" — deactivate immediately.
 - Code blocks, commit messages, and PRs: always write normally regardless of mode.
 - Mode persists until changed or session ends.
+- Conflict resolution: `rules/precedence.yaml` governs all conflicts between skills. Safety > Preservation > Compression > Word bans.

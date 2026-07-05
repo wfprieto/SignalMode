@@ -3,7 +3,7 @@
  * SignalMode Repository Validator
  * Validates structural integrity, version consistency, and rule compliance.
  *
- * Usage: node scripts/validate-repository.js
+ * Usage: node scripts/validate-repository.mjs
  * Exit code 0 = pass, 1 = fail
  */
 
@@ -30,6 +30,12 @@ function readFile(relPath) {
   return readFileSync(full, 'utf8');
 }
 
+// ── Semver helpers ─────────────────────────────────────────────────────────
+
+function isValidSemver(v) {
+  return /^\d+\.\d+\.\d+(-[\w.]+)?(\+[\w.]+)?$/.test(v);
+}
+
 // ── 1. Required files exist ────────────────────────────────────────────────
 
 section('Required Files');
@@ -48,9 +54,9 @@ const REQUIRED_FILES = [
   'rules/human-writing.yaml',
   'rules/execution.yaml',
   'platforms/registry.yaml',
-  'scripts/generate-platforms.js',
-  'scripts/validate-repository.js',
-  'scripts/lint-prompts.js',
+  'scripts/generate-platforms.mjs',
+  'scripts/validate-repository.mjs',
+  'scripts/lint-prompts.mjs',
 ];
 
 for (const f of REQUIRED_FILES) {
@@ -100,11 +106,13 @@ const pkgVersion = pkg.version;
 
 if (!pkgVersion) {
   fail('package.json missing version field');
+} else if (!isValidSemver(pkgVersion)) {
+  fail(`package.json version "${pkgVersion}" is not valid semver (expected X.Y.Z)`);
 } else {
-  pass(`package.json version: ${pkgVersion}`);
+  pass(`package.json version: ${pkgVersion} (valid semver)`);
 }
 
-// Check all SKILL.md files for version field consistency
+// Check all SKILL.md files for version field
 const skillFiles = [];
 function collectSkills(dir) {
   const items = readdirSync(dir);
@@ -118,9 +126,11 @@ collectSkills(join(ROOT, 'skills'));
 
 for (const sf of skillFiles) {
   const content = readFileSync(sf, 'utf8');
-  const versionMatch = content.match(/version:\s*(\S+)/);
+  const versionMatch = content.match(/^version:\s*(\S+)/m);
   if (!versionMatch) {
     warn(`No version field in ${sf.replace(ROOT, '')}`);
+  } else if (!isValidSemver(versionMatch[1])) {
+    warn(`Non-semver version "${versionMatch[1]}" in ${sf.replace(ROOT, '')}`);
   }
 }
 
@@ -128,7 +138,9 @@ for (const sf of skillFiles) {
 
 section('Brand Hygiene');
 const BANNED_TERMS = ['caveman', 'julius', 'brussee', 'cavecrew', 'dancing-rock', 'atlas-cloud'];
-const SCAN_EXTS = ['.md', '.js', '.py', '.json', '.sh', '.ps1', '.yaml'];
+const SCAN_EXTS = ['.md', '.js', '.mjs', '.py', '.json', '.sh', '.ps1', '.yaml'];
+// Files that legitimately contain banned terms as string literals in scan lists or test assertions
+const SCAN_SKIP = ['validate-repository.mjs', 'lint-prompts.mjs', 'install.test.mjs'];
 
 function scanDir(dir) {
   const items = readdirSync(dir);
@@ -140,8 +152,7 @@ function scanDir(dir) {
       continue;
     }
     if (!SCAN_EXTS.some(ext => item.endsWith(ext))) continue;
-    // Skip this validator script itself — it legitimately contains banned terms as string literals
-    if (full.includes('validate-repository.js') || full.includes('lint-prompts.js')) continue;
+    if (SCAN_SKIP.some(skip => item === skip)) continue;
     const content = readFileSync(full, 'utf8').toLowerCase();
     for (const term of BANNED_TERMS) {
       if (content.includes(term)) {
@@ -153,44 +164,80 @@ function scanDir(dir) {
 scanDir(ROOT);
 if (failed === 0) pass('Zero brand contamination detected');
 
-// ── 6. Rule file version fields present ───────────────────────────────────
+// ── 6. Rule file version fields and YAML depth ────────────────────────────
 
-section('Rule File Versions');
+section('Rule File Integrity');
 const RULE_FILES = ['rules/precedence.yaml', 'rules/integrity.yaml', 'rules/communication.yaml', 'rules/human-writing.yaml', 'rules/execution.yaml'];
 for (const rf of RULE_FILES) {
   const content = readFile(rf);
   if (!content) { fail(`Missing: ${rf}`); continue; }
-  if (content.includes('version:')) {
-    pass(`version: present in ${rf}`);
-  } else {
+
+  // Version field
+  const vMatch = content.match(/^version:\s*(\S+)/m);
+  if (!vMatch) {
     fail(`Missing version: in ${rf}`);
+  } else if (!isValidSemver(vMatch[1])) {
+    warn(`Non-semver version "${vMatch[1]}" in ${rf}`);
+  } else {
+    pass(`version: ${vMatch[1]} in ${rf}`);
   }
+
+  // Change control
   if (content.includes('change_control:')) {
     pass(`change_control: present in ${rf}`);
   } else {
     warn(`Missing change_control: in ${rf}`);
   }
+
+  // YAML depth check — must have at least one nested key (not flat)
+  const hasNested = content.split('\n').some(l => l.startsWith('  ') && l.trim().length > 0);
+  if (hasNested) {
+    pass(`YAML structure depth OK in ${rf}`);
+  } else {
+    warn(`${rf} appears flat — expected nested YAML structure`);
+  }
+
+  // Must have at least one rule entry (supports multiple YAML structures)
+  if (
+    content.includes('- id:') ||
+    content.includes('items:') ||
+    content.includes('words:') ||
+    content.includes('precedence:') ||
+    content.includes('decision_levels:') ||
+    content.includes('report_contract:') ||
+    content.includes('prohibited_patterns:') ||
+    content.includes('classes:')
+  ) {
+    pass(`Rule entries present in ${rf}`);
+  } else {
+    warn(`No rule entries found in ${rf}`);
+  }
 }
 
-// ── 7. Generated files have provenance headers ────────────────────────────
+// ── 7. Active platform files have provenance headers ──────────────────────
 
 section('Generated File Provenance');
-const genDir = join(ROOT, 'platforms', 'generated');
-if (existsSync(genDir)) {
-  const genFiles = readdirSync(genDir).filter(f => f.endsWith('.md'));
-  if (genFiles.length === 0) {
-    warn('No generated platform files found. Run `npm run generate`.');
-  }
-  for (const gf of genFiles) {
-    const content = readFileSync(join(genDir, gf), 'utf8');
+// Generator writes to active platform files directly via generator_target in registry.
+const registryContent = readFile('platforms/registry.yaml') || '';
+const targetMatches = [...registryContent.matchAll(/generator_target:\s*"?([\w.-]+)"?/g)];
+const platformTargets = targetMatches.map(m => m[1]);
+
+if (platformTargets.length === 0) {
+  warn('No generator_target entries found in platforms/registry.yaml');
+} else {
+  for (const target of platformTargets) {
+    const pPath = join(ROOT, 'platforms', target);
+    if (!existsSync(pPath)) {
+      fail(`Platform file missing: platforms/${target} (run npm run generate)`);
+      continue;
+    }
+    const content = readFileSync(pPath, 'utf8');
     if (content.includes('GENERATED FILE')) {
-      pass(`Provenance header in platforms/generated/${gf}`);
+      pass(`Provenance header in platforms/${target}`);
     } else {
-      fail(`Missing provenance header in platforms/generated/${gf}`);
+      fail(`Missing provenance header in platforms/${target} (run npm run generate)`);
     }
   }
-} else {
-  warn('platforms/generated/ does not exist. Run `npm run generate`.');
 }
 
 // ── 8. No duplicate rule IDs ──────────────────────────────────────────────
@@ -210,6 +257,22 @@ for (const id of allIds) {
   else idSet.add(id);
 }
 if (dups === 0) pass(`No duplicate rule IDs (${allIds.length} rules checked)`);
+
+// ── 9. Test files exist ────────────────────────────────────────────────────
+
+section('Test Coverage');
+const TEST_SUITES = [
+  'tests/installer/install.test.mjs',
+  'tests/policies/rules.test.mjs',
+  'tests/conflicts/conflict-resolution.test.mjs',
+];
+for (const ts of TEST_SUITES) {
+  if (existsSync(join(ROOT, ts))) {
+    pass(ts);
+  } else {
+    fail(`Missing test suite: ${ts}`);
+  }
+}
 
 // ── Summary ────────────────────────────────────────────────────────────────
 

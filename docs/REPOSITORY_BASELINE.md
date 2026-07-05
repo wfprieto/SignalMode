@@ -22,7 +22,7 @@ SignalMode is an LLM-agnostic communication optimizer for AI coding agents. It f
 **Weaknesses:** 
 1. `package.json` version is `1.0.0`, but skills are marked as `2.0.0` or `1.0.0` inconsistently.
 2. `skills/signalmode-voice/SKILL.md` has its "How to Customize" section placed after the "Final Rule", breaking the logical flow.
-3. The README claims "65-75% token savings" but the `evals/README.md` provides no benchmark data to support this specific claim.
+3. The README claims "up to 70% (estimated, unverified) token savings" but the `evals/README.md` provides no benchmark data to support this specific claim.
 
 ## Agent and Workflow Reliability (Score: 7/10)
 **Strengths:** `signalcrew` defines clear roles and handoffs.

@@ -14,10 +14,10 @@ Works with Claude Code, ChatGPT, Codex, Gemini, Copilot, Cursor, Windsurf, Repli
 |---|---|
 | **signalmode** | Core signal: drop filler, keep substance. Terse but never cryptic. |
 | **signalmode-voice** | Your personal writing voice template (customizable). Ships with The Strategist voice: verdict-first, calm authority, no corporate theater. |
-| **signalmode-human** | Immutable anti-AI hygiene rules. Removes every detectable AI writing tell. Do not edit. |
+| **signalmode-human** | Protected versioned policy. Reduces common patterns associated with generic AI writing while preserving correct terminology. |
 | **signalmode-basic-english** | Forces plain, layman-friendly reports. 5-section structure. Assumes the reader knows nothing about code or platforms. |
 | **signalmode-compress** | Rewrites memory files (CLAUDE.md, AGENTS.md, etc.) into compressed form — save tokens every future session. |
-| **signalmode-stats** | Real token savings from your session log. No estimates. |
+| **signalmode-stats** | Uses session-log data to estimate token and cost savings. Results are directional, not billing-grade measurements. |
 | **signalmode-refresh** | Compiles the active session into a lean continuation contract. Clean handoff to a new session, a human, or another agent. |
 | **signalcrew** | Multi-agent crew: Builder, Investigator, Reviewer. Spec-driven, no guessing. |
 
@@ -121,18 +121,18 @@ A customizable writing voice template. Ships with The Strategist voice as the de
 /signalmode-voice off
 ```
 
-### `/signalmode-human` — Immutable anti-AI hygiene
+### `/signalmode-human` — Anti-AI hygiene
 
-**Do not edit this skill.** These rules are fixed and apply universally. Removes every detectable AI writing tell: banned words, banned phrases, banned sentence structures, banned punctuation habits, and banned formatting patterns.
+**Protected versioned policy.** These rules reduce common patterns associated with generic AI writing while preserving correct terminology and source material.
 
 ```bash
 /signalmode-human
 /signalmode-human off
 ```
 
-Bans: delve, leverage, utilize, robust, seamless, holistic, em dashes, fake-suspense phrases, helpful-bot openers, hedge-stacking, self-posed questions, over-formatting, and 200+ other AI tells. These rules do not change.
+Replaces habitual AI language with clean prose. Implements a three-class system: prohibited patterns (always wrong), high-risk language (context-dependent), and preserve-exactly exceptions (protecting user copy, legal language, and code).
 
-**Use both together for full signal hygiene.** Voice is yours to customize. Human is immutable.
+**Use both together for full signal hygiene.** Voice is yours to customize. Human is a protected versioned policy.
 
 ### `/signalcrew` — Multi-agent crew
 
@@ -150,7 +150,7 @@ Three-agent crew for spec-driven development:
 2. Skills tell the agent: drop filler, keep substance, use fragments — but never touch code, commands, or errors.
 3. On Claude Code, a hook writes a flag file each session so the agent uses SignalMode from message one.
 4. `/signalmode-voice` applies a verdict-first, judgment-driven voice standard to all output.
-5. `/signalmode-human` removes every detectable AI writing tell — banned words, banned phrases, banned structures, banned punctuation.
+5. `/signalmode-human` reduces common patterns associated with generic AI writing using a three-class filtering system.
 6. `/signalmode-stats` reads your session log, counts tokens saved.
 7. `/signalmode-compress` rewrites memory files so every future session starts with a smaller context.
 8. `/signalmode-refresh` compiles a clean handoff contract when sessions get long.

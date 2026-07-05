@@ -43,7 +43,7 @@ Before proceeding with any action, classify it:
 1. **Investigator** audits and produces a brief.
 2. **Builder** implements against the brief.
 3. **Reviewer** reviews the implementation.
-4. **Repair Loop:** If the Reviewer finds CRITICAL issues, the Builder is recalled to fix them. The Reviewer then re-reviews. This loop continues until no CRITICAL issues remain or a Level 4 Blocker is hit.
+4. **Repair Loop:** If the Reviewer finds CRITICAL issues, the Builder is recalled to fix them. The Reviewer then re-reviews. **This loop is strictly capped at 3 cycles.** If the implementation still fails after 3 repair attempts, stop and ask the user for guidance.
 5. Final summary delivered to user.
 
 ## Report Output Contract

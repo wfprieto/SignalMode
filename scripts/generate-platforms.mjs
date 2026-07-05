@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 /**
  * SignalMode Platform Generator
- * Generates platform adapter files in platforms/generated/ from canonical rules.
+ * Generates active platform adapter files directly from canonical rules.
+ * Output path is determined by generator_target in platforms/registry.yaml.
  *
- * Usage: node scripts/generate-platforms.js [--dry-run]
+ * Usage: node scripts/generate-platforms.mjs [--dry-run]
  */
 
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
@@ -35,7 +36,8 @@ function readRegistry() {
       continue;
     }
     if (current) {
-      const fieldMatch = line.match(/^    (\w+): (.+)$/);
+      // Support keys with underscores (e.g. generator_target) and quoted/unquoted values
+      const fieldMatch = line.match(/^    ([\w_]+): (.+)$/);
       if (fieldMatch) {
         platforms[current][fieldMatch[1]] = fieldMatch[2].replace(/^"(.*)"$/, '$1');
       }
@@ -82,7 +84,26 @@ function readPrecedenceRules() {
 
 function readHumanWritingRules() {
   const raw = readYaml('rules/human-writing.yaml');
-  return raw;
+  // Extract the three-class word system for inclusion in platform files
+  // Actual YAML structure uses: prohibited_patterns.items, high_risk_language.words
+  const prohibited = [];
+  const highRisk = [];
+  let section = null;
+  for (const line of raw.split('\n')) {
+    if (line.match(/^  prohibited_patterns:/)) { section = 'prohibited'; continue; }
+    if (line.match(/^  high_risk_language:/)) { section = 'high_risk'; continue; }
+    if (line.match(/^  preserve_exactly:/)) { section = null; continue; }
+    if (line.match(/^  \w/) && section) { section = null; continue; } // new top-level key
+    if (section === 'prohibited' && line.match(/^      - /)) {
+      const m = line.match(/^      - "?([^"\n]+?)"?$/);
+      if (m) prohibited.push(m[1].replace(/^"(.*)"$/, '$1'));
+    }
+    if (section === 'high_risk' && line.match(/^      - /)) {
+      const m = line.match(/^      - "?([^"\n]+?)"?$/);
+      if (m) highRisk.push(m[1].replace(/^"(.*)"$/, '$1'));
+    }
+  }
+  return { prohibited, highRisk };
 }
 
 function provenance(platform) {
@@ -90,7 +111,7 @@ function provenance(platform) {
 GENERATED FILE — DO NOT EDIT DIRECTLY.
 Source: rules/communication.yaml + rules/precedence.yaml + rules/human-writing.yaml
 Platform: ${platform}
-Generator: scripts/generate-platforms.js
+Generator: scripts/generate-platforms.mjs
 To update: edit the source rule files, then run \`npm run generate\`.
 -->
 `;
@@ -187,7 +208,7 @@ Add to \`.windsurfrules\` in your project root.
 
 // ── generator ──────────────────────────────────────────────────────────────
 
-function generatePlatformFile(platformId, meta, commRules, precOrder) {
+function generatePlatformFile(platformId, meta, commRules, precOrder, humanRules) {
   const name = meta.name || platformId;
   const support = meta.support || 'instructions-only';
   const install = meta.install || 'manual';
@@ -201,6 +222,14 @@ function generatePlatformFile(platformId, meta, commRules, precOrder) {
   const precText = precOrder
     .map((p, i) => `${i + 1}. ${p}`)
     .join('\n');
+
+  // Build human-writing section from canonical rules/human-writing.yaml
+  const prohibitedText = humanRules.prohibited.length
+    ? `**Prohibited patterns (always wrong):** ${humanRules.prohibited.slice(0, 12).join(', ')}${humanRules.prohibited.length > 12 ? ', and more' : ''}.`
+    : '';
+  const highRiskText = humanRules.highRisk.length
+    ? `**High-risk language (context-dependent):** ${humanRules.highRisk.slice(0, 8).join(', ')}${humanRules.highRisk.length > 8 ? ', and more' : ''}.`
+    : '';
 
   const installInstructions = INSTALL_INSTRUCTIONS[platformId] ||
     `## Installation\n\nPaste the system prompt below into your agent's instruction field.\n\n**Trigger:** \`/signalmode\``;
@@ -227,6 +256,10 @@ ${precText}
 
 ## Communication Rules
 ${commRulesText}
+
+## Writing Hygiene
+${prohibitedText}
+${highRiskText}
 
 ## Exact Preservation
 Never compress or alter: code blocks, inline code, file paths, commands, URLs, error messages, user-provided copy, legal language, quoted text, specifications.
@@ -270,31 +303,37 @@ function main() {
   const registry = readRegistry();
   const commRules = readCommunicationRules();
   const precOrder = readPrecedenceRules();
-
-  const outDir = join(ROOT, 'platforms', 'generated');
-  if (!DRY_RUN) {
-    mkdirSync(outDir, { recursive: true });
-  }
+  const humanRules = readHumanWritingRules();
 
   let generated = 0;
   let skipped = 0;
+  let errors = 0;
 
   for (const [platformId, meta] of Object.entries(registry)) {
-    const content = generatePlatformFile(platformId, meta, commRules, precOrder);
-    const outPath = join(outDir, `${platformId}.md`);
+    // Write directly to the active platform file via generator_target.
+    // This ensures the installer, README, and INSTALL.md always reference up-to-date content.
+    const target = meta.generator_target || `${platformId}.md`;
+    const outPath = join(ROOT, 'platforms', target);
+    const content = generatePlatformFile(platformId, meta, commRules, precOrder, humanRules);
 
     if (DRY_RUN) {
-      console.log(`[DRY RUN] Would write: platforms/generated/${platformId}.md`);
+      console.log(`[DRY RUN] Would write: platforms/${target}`);
       skipped++;
     } else {
-      writeFileSync(outPath, content, 'utf8');
-      console.log(`✓ platforms/generated/${platformId}.md`);
-      generated++;
+      try {
+        writeFileSync(outPath, content, 'utf8');
+        console.log(`✓ platforms/${target}`);
+        generated++;
+      } catch (e) {
+        console.error(`✗ platforms/${target}: ${e.message}`);
+        errors++;
+      }
     }
   }
 
   console.log('─'.repeat(50));
-  console.log(`${DRY_RUN ? 'Would generate' : 'Generated'}: ${generated + skipped} files`);
+  console.log(`${DRY_RUN ? 'Would generate' : 'Generated'}: ${generated + skipped} files${errors ? `, ${errors} errors` : ''}`);
+  if (errors > 0) process.exit(1);
   console.log('Done.');
 }
 
