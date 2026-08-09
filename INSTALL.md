@@ -2,9 +2,19 @@
 
 ## Quick Install
 
+**macOS / Linux:**
+
 ```bash
-npx signalmode
+curl -fsSL https://raw.githubusercontent.com/wfprieto/SignalMode/main/install.sh | bash
 ```
+
+**Windows:**
+
+```powershell
+irm https://raw.githubusercontent.com/wfprieto/SignalMode/main/install.ps1 | iex
+```
+
+`npx signalmode` works once v2.1.1 is published to the npm registry.
 
 Auto-detects installed AI coding agents and installs SignalMode for each one.
 
