@@ -33,9 +33,9 @@ jobs:
                    src/hooks/signalmode-mode-tracker.js \
                    src/hooks/signalmode-config.js \
                    src/hooks/signalcrew-model-overrides.js \
-                   scripts/generate-platforms.js \
-                   scripts/validate-repository.js \
-                   scripts/lint-prompts.js; do
+                   scripts/generate-platforms.mjs \
+                   scripts/validate-repository.mjs \
+                   scripts/lint-prompts.mjs; do
             node --check "$f" && echo "OK: $f" || { echo "FAIL: $f"; exit 1; }
           done
 
@@ -88,10 +88,13 @@ jobs:
           if [ "$MISSING" -gt 0 ]; then exit 1; fi
 
       - name: Run repository validator
-        run: node scripts/validate-repository.js
+        run: node scripts/validate-repository.mjs
 
       - name: Run prompt linter
-        run: node scripts/lint-prompts.js
+        run: node scripts/lint-prompts.mjs
+
+      - name: Run test suite
+        run: npm test
 
       - name: Validate SKILL.md triggers
         run: |
