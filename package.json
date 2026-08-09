@@ -1,6 +1,6 @@
 {
   "name": "signalmode",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "SignalMode — Signal over noise. LLM-agnostic communication optimizer for AI coding agents.",
   "license": "MIT",
   "author": "wfprieto",
@@ -27,6 +27,7 @@
     "test:policies": "node --test tests/policies/*.test.mjs",
     "check": "npm run validate && npm run lint",
     "precommit": "npm run check",
+    "prepublishOnly": "npm run ci",
     "ci": "npm run generate:check && npm run validate && npm run lint && npm test && npm run smoke",
     "smoke": "node bin/install.js --help && node bin/install.js --list",
     "generate:check": "node scripts/generate-platforms.mjs && git diff --exit-code -- platforms/ || (echo \"FAIL: platform files are stale, run npm run generate\" && exit 1)"
@@ -39,7 +40,6 @@
     "platforms/",
     "rules/",
     "scripts/",
-    "commands/",
     "README.md",
     "LICENSE",
     "INSTALL.md"

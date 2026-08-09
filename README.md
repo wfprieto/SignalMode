@@ -25,11 +25,7 @@ Works with Claude Code, ChatGPT, Codex, Gemini, Copilot, Cursor, Windsurf, Repli
 
 ## Install
 
-```bash
-npx signalmode
-```
-
-Or with curl:
+**macOS / Linux:**
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/wfprieto/SignalMode/main/install.sh | bash
@@ -39,6 +35,12 @@ curl -fsSL https://raw.githubusercontent.com/wfprieto/SignalMode/main/install.sh
 
 ```powershell
 irm https://raw.githubusercontent.com/wfprieto/SignalMode/main/install.ps1 | iex
+```
+
+**npm** (available once v2.1.1 is published to the npm registry):
+
+```bash
+npx signalmode
 ```
 
 See [INSTALL.md](./INSTALL.md) for the full platform matrix.
